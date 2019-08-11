@@ -2,18 +2,24 @@ import React, {Component} from 'react'
 import Category from './Category'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import terror from './terror.jpg'
+import amor from './love.jpg'
+import accion from './action.jpg'
 
 class Categories extends Component {
   render(){
-    const ghost = <i class="fas fa-ghost fa-3x"></i>
-    const heart = <i class="fas fa-heart fa-3x"></i>
-    const bomb = <i class="fas fa-bomb fa-3x"></i>
     return(
-      <div>
-        <Category icon={ghost} title='Terror' />
-        <Category icon={heart} title='Amor' />
-        <Category icon={bomb} title='Acción' />
-      </div>
+      <Row style={{paddingTop: '20px', paddingBottom: '20px'}}>
+        <Col>
+          <Category image={terror} title='Terror' />
+        </Col>
+        <Col>
+          <Category image={amor} title='Amor' />
+        </Col>
+        <Col>
+          <Category image={accion} title='Acción' />
+        </Col>
+      </Row>
     );
   }
 }

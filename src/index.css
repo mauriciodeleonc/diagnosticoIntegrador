@@ -17,3 +17,37 @@ code {
 .rounded{
   border-radius: 100px !important;
 }
+
+.card-img-overlay{
+  padding-top: 26%;
+  border-radius: 40px;
+}
+
+.category{
+  max-height: 300px;
+  border-style: none;
+  filter: grayscale(100%);
+  transition: all .2s ease-in-out;
+}
+
+.category:hover{
+  box-shadow: 0 5px 5px 0 rgba(46,61,73,0.30);
+  filter: grayscale(0%);
+  transform: scale(1.05);
+}
+
+.categoryTitle{
+  font-size: 50px;
+}
+
+.movieCard{
+  border-style: none;
+  box-shadow: 0 5px 5px 0 rgba(46,61,73,0.30);
+  transition: all .2s ease-in-out;
+  width: 18rem;
+  margin-right: 15px;
+}
+
+.movieCard:hover{
+  transform: scale(1.05);
+}
