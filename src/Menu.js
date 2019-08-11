@@ -105,7 +105,7 @@ class Menu extends React.Component {
                   director = {pelicula.director}
                   remove = {this.removeData}
                   update = {this.updateData}
-                  pelicula = {this.pelicula}//Necesito pasar pelicula como parametro
+                  //pelicula = {this.pelicula}Necesito pasar pelicula como parametro
                   />
                   /*<div
                   key={pelicula.uid}

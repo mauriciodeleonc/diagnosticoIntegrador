@@ -7,7 +7,7 @@ class MovieCard extends Component{
     super(props);
     this.removeData = this.removeData.bind(this);//Sigo sin poder pasar funciones entre componentes
     this.updateData = this.updateData.bind(this);
-    this.pelicula = pelicula;
+    //this.pelicula = pelicula;
   }
   removeData(props) {
     this.props.remove(props);
@@ -25,8 +25,8 @@ class MovieCard extends Component{
           <Card.Text>Categoria: {this.props.categoria}</Card.Text>
           <Card.Text>Duración: {this.props.duracion}</Card.Text>
           <Card.Text>Dirección: {this.props.director}</Card.Text>
-          <Button onClick={() => this.props.remove(pelicula)}>Borrar</Button>
-          <Button onClick={() => this.props.upgrade(pelicula)}>Editar</Button>
+          //<Button onClick={() => this.props.remove()}>Borrar</Button>
+          //<Button onClick={() => this.props.upgrade()}>Editar</Button>
         </Card.Body>
       </Card>
     );
