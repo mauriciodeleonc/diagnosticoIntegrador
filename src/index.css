@@ -1,3 +1,8 @@
+* {
+    margin: 0;
+   padding: 0;
+}
+
 body {
   margin: 0;
   font-family: 'Poppins',
@@ -19,7 +24,7 @@ code {
 }
 
 .card-img-overlay{
-  padding-top: 26%;
+  padding-top: 15%;
   border-radius: 40px;
 }
 
@@ -28,6 +33,16 @@ code {
   border-style: none;
   filter: grayscale(100%);
   transition: all .2s ease-in-out;
+  object-fit: cover;
+}
+
+.categoryImg{
+  height: 220px;
+  max-width: 100%;
+}
+
+.container{
+  padding: 0 !important;
 }
 
 .category:hover{
@@ -37,17 +52,24 @@ code {
 }
 
 .categoryTitle{
-  font-size: 50px;
+  font-size: 3rem;
 }
 
 .movieCard{
   border-style: none;
   box-shadow: 0 5px 5px 0 rgba(46,61,73,0.30);
   transition: all .2s ease-in-out;
-  width: 18rem;
-  margin-right: 15px;
+  width: 19rem;
+  margin: 5px 15px 15px 0;
 }
 
 .movieCard:hover{
   transform: scale(1.05);
+}
+
+
+@media only screen and (max-width: 320px) {
+  .categoryTitle{
+    font-size: 1rem;
+  }
 }

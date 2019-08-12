@@ -9,15 +9,15 @@ import accion from './action.jpg'
 class Categories extends Component {
   render(){
     return(
-      <Row style={{paddingTop: '20px', paddingBottom: '20px'}}>
-        <Col>
-          <Category image={terror} title='Terror' />
+      <Row style={{paddingTop: '20px', paddingBottom: '20px'}} className='justify-content-md-between'>
+        <Col xs={12} sm={6} md={4}>
+          <Category image={terror} title='Terror' filtrarCategorias = {this.props.filtrarCategorias} />
         </Col>
-        <Col>
-          <Category image={amor} title='Amor' />
+        <Col xs={12} sm={6} md={4}>
+          <Category image={amor} title='Amor' filtrarCategorias = {this.props.filtrarCategorias} />
         </Col>
-        <Col>
-          <Category image={accion} title='Acción' />
+        <Col xs={12} sm={6} md={4}>
+          <Category image={accion} title='Acción' filtrarCategorias = {this.props.filtrarCategorias} />
         </Col>
       </Row>
     );

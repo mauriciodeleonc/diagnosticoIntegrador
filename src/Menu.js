@@ -1,9 +1,18 @@
-import React from "react";
 import Modal from 'react-bootstrap/Modal'
-import Card from 'react-bootstrap/Card'
+import Button from 'react-bootstrap/Button'
 import MovieCard from './MovieCard'
+import Agregar from './Agregar'
 import Firebase from "firebase";
 import config from "./config";
+import React, {Component} from 'react'
+import Navigation from'./Navigation'
+import Categories from'./Categories'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import Card from 'react-bootstrap/Card'
+import Form from 'react-bootstrap/Form'
+import FormControl from 'react-bootstrap/FormControl'
 
 class Menu extends React.Component {
   constructor(props) {
@@ -13,7 +22,8 @@ class Menu extends React.Component {
     Firebase.initializeApp(config);
 
     this.state = {
-      peliculas: []
+      peliculas: [],
+      filtro: undefined
     };
   }
 
@@ -21,20 +31,15 @@ class Menu extends React.Component {
     this.getUserData();
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState !== this.state) {
-      this.writeUserData();
-    }
-  }
-
-  writeUserData = () => {
-    Firebase.database().ref("/").set(this.state);
+  writeUserData(){
+    Firebase.database().ref("/").update(this.state);
   };
 
   getUserData = () => {
     let ref = Firebase.database().ref("/");
     ref.on("value", snapshot => {
       const state = snapshot.val();
+      console.log(state);
       this.setState(state);
     });
   };
@@ -45,25 +50,25 @@ class Menu extends React.Component {
     let nombre = this.refs.nombre.value;
     let duracion = this.refs.duracion.value;
     let director = this.refs.director.value;
-    //let protagonistas[] = this.refs.protagonistas.value; AQUI ES DONDE ESTA EL PEDO
+    let protagonistas = this.refs.protagonistas.value;
     let uid = this.refs.uid.value;
-
-    if (uid && categoria && nombre && duracion && director) {
+    if (uid && categoria && nombre && duracion && director && protagonistas) {
       const { peliculas } = this.state;
-      const devIndex = peliculas.findIndex(data => {
+      const countPeliculas = peliculas.findIndex(data => {
         return data.uid === uid;
       });
-      peliculas[devIndex].categoria = categoria;
-      peliculas[devIndex].nombre = nombre;
-      peliculas[devIndex].duracion = duracion;
-      peliculas[devIndex].director = director;
-      //peliculas[devIndex].protagonistas = protagonistas[devIndex];
-      this.setState({ peliculas });
-    } else if (categoria && nombre && director && duracion) {
+      peliculas[countPeliculas].categoria = categoria;
+      peliculas[countPeliculas].nombre = nombre;
+      peliculas[countPeliculas].duracion = duracion;
+      peliculas[countPeliculas].director = director;
+      peliculas[countPeliculas].protagonistas = protagonistas;
+      Firebase.database().ref("/").update(peliculas);
+    } else if (categoria && nombre && director && duracion && protagonistas) {
       const uid = new Date().getTime().toString();
-      const { peliculas } = this.state;
-      peliculas.push({ uid, categoria, nombre, duracion, director });
-      this.setState({ peliculas });
+      const peliculas = this.state.peliculas;
+      console.log(peliculas);
+      peliculas.push({ uid, categoria, nombre, duracion, director, protagonistas })
+      Firebase.database().ref("/peliculas").update(peliculas);
     }
 
     this.refs.categoria.value = "";
@@ -71,6 +76,7 @@ class Menu extends React.Component {
     this.refs.uid.value = "";
     this.refs.duracion.value = "";
     this.refs.director.value = "";
+    this.refs.protagonistas.value = "";
   };
 
   removeData = pelicula => {
@@ -87,104 +93,119 @@ class Menu extends React.Component {
     this.refs.nombre.value = pelicula.nombre;
     this.refs.director.value = pelicula.director;
     this.refs.duracion.value = pelicula.duracion;
+    this.refs.protagonistas.value = pelicula.protagonistas;
   };
 
+  filtrar(input){
+    let filtro = [...this.state.peliculas];
+    if(input !== ""){
+      let arreglo = filtro.filter(pelicula =>
+        pelicula.nombre.toLowerCase().startsWith(input.toLowerCase()) || pelicula.director.toLowerCase().startsWith(input.toLowerCase())
+      );
+      console.log(arreglo);
+      if(arreglo)
+        this.setState({filtro: arreglo})
+    } else this.setState({filtro: undefined})
+  }
+
+  filtrarCategorias(categoria){
+    let filtro = [...this.state.peliculas];
+    let arreglo = filtro.filter(pelicula => pelicula.categoria === categoria);
+    if(arreglo) this.setState({filtro: arreglo}); else this.setState({filtro: []})
+  }
+
   render() {
-    const { peliculas } = this.state;
+    let peliculas = [];
+    if(this.state.filtro) peliculas = this.state.filtro; else peliculas = this.state.peliculas;
     return (
-      <React.Fragment>
-        <div className="container">
-          <div className="row">
-            <div className="col-xl-12">
-              {peliculas.map(pelicula => (
-                <MovieCard
-                  key = {pelicula.uid}
-                  nombre = {pelicula.nombre}
-                  categoria = {pelicula.categoria}
-                  duracion = {pelicula.duracion}
-                  director = {pelicula.director}
-                  remove = {this.removeData}
-                  update = {this.updateData}
-                  //pelicula = {this.pelicula}Necesito pasar pelicula como parametro
-                  />
-                  /*<div
-                  key={pelicula.uid}
-                  className="card float-left"
-                  style={{ width: "18rem", marginRight: "1rem" }}
-                >
-                  <div className="card-body">
-                    <h5 className="card-title">{pelicula.categoria}</h5>
-                    <p className="card-text">{pelicula.nombre}</p>
-                    <p className="card-text">{pelicula.duracion}</p>
-                    <p className="card-text">{pelicula.director}</p>
-                    <button
-                      onClick={() => this.removeData(pelicula)}
-                      className="btn btn-link"
-                    >
-                      Delete
-                    </button>
-                    <button
-                      onClick={() => this.updateData(pelicula)}
-                      className="btn btn-link"
-                    >
-                      Edit
-                    </button>
-                  </div>
-                </div>*/
-              ))}
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-xl-12">
-              <h1>Agregar Pelicula</h1>
+      <>
+      <Navigation filtroNav = {this.filtrar.bind(this)}/>
+      <Container>
+        <Row className='justify-content-center'>
+          <Categories filtrarCategorias = {this.filtrarCategorias.bind(this)} />
+        </Row>
+        <Row>
+          <Col>
+            {peliculas.map(pelicula => (
+              <MovieCard
+                key = {pelicula.uid}
+                nombre = {pelicula.nombre}
+                categoria = {pelicula.categoria}
+                duracion = {pelicula.duracion}
+                director = {pelicula.director}
+                remove = {this.removeData}
+                upgrade = {this.updateData}
+                pelicula = {pelicula}
+                protagonistas = {pelicula.protagonistas}
+                />
+            ))}
+          </Col>
+        </Row>
+        <Row className="justify-content-md-center">
+          <Col>
+            <Card id='agregar'>
+              <Card.Body>
+              <Card.Title id="agregar-pelicula" class='h2' style={{marginBottom: '15px'}}>
+                ¡Agrega una película!
+              </Card.Title>
               <form onSubmit={this.handleSubmit}>
-                <div className="form-row">
-                  <input type="hidden" ref="uid" />
-                  <div className="form-group col-md-6">
-                    <label>Categoria</label>
-                    <input
-                      type="text"
-                      ref="categoria"
-                      className="form-control"
-                      placeholder="Categoria"
-                    />
-                  </div>
-                  <div className="form-group col-md-6">
-                    <label>Nombre</label>
-                    <input
-                      type="text"
-                      ref="nombre"
-                      className="form-control"
-                      placeholder="Nombre"
-                    />
-                  </div>
-                  <div className="form-group col-md-6">
-                    <label>Director</label>
-                    <input
-                      type="text"
-                      ref="director"
-                      className="form-control"
-                      placeholder="Director"
-                    />
-                  </div>
-                  <div className="form-group col-md-6">
-                    <label>Duracion</label>
-                    <input
-                      type="text"
-                      ref="duracion"
-                      className="form-control"
-                      placeholder="Duracion"
-                    />
-                  </div>
-                </div>
-                <button type="submit" className="btn btn-primary">
+                <Form.Group as={Row} controlId="formHorizontalEmail" role='form'>
+                <input type="hidden" ref="uid" />
+                  <Form.Label column sm={4}>
+                    Nombre de la pelicula
+                  </Form.Label>
+                  <Col sm={8}>
+                    <Form.Control type="text" placeholder="Ej. The Revenant" ref='nombre' />
+                  </Col>
+                </Form.Group>
+                <Form.Group as={Row} controlId="formHorizontalPassword">
+                  <Form.Label column sm={4}>
+                    Duración (en minutos)
+                  </Form.Label>
+                  <Col sm={8}>
+                    <Form.Control type="number" placeholder="Ej. 185" ref='duracion' />
+                  </Col>
+                </Form.Group>
+                <Form.Group as={Row} controlId="formHorizontalEmail">
+                  <Form.Label column sm={4}>
+                    Dirección
+                  </Form.Label>
+                  <Col sm={8}>
+                    <Form.Control type="text" placeholder="Ej. Quentin Tarantino" ref='director' />
+                  </Col>
+                </Form.Group>
+                <Form.Group as={Row} controlId="formHorizontalEmail">
+                  <Form.Label column sm={4}>
+                    Protagonistas
+                  </Form.Label>
+                  <Col sm={8}>
+                    <Form.Control type="text" placeholder="Ej. Leonardo DiCaprio" ref='protagonistas' />
+                  </Col>
+                </Form.Group>
+                <fieldset>
+                  <Form.Group as={Row}>
+                    <Form.Label column sm={4}>
+                      Categoria
+                    </Form.Label>
+                    <Col sm={8}>
+                      <Form.Control as="select" ref='categoria'>
+                        <option>Terror</option>
+                        <option>Amor</option>
+                        <option>Acción</option>
+                      </Form.Control>
+                    </Col>
+                  </Form.Group>
+                </fieldset>
+                <Button type="submit" className="btn btn-primary">
                   Agregar película
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </React.Fragment>
+                </Button>
+                </form>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+      </>
     );
   }
 }

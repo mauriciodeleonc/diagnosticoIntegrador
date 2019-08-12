@@ -5,10 +5,9 @@ import Button from 'react-bootstrap/Button'
 class MovieCard extends Component{
   constructor(props) {
     super(props);
-    this.removeData = this.removeData.bind(this);//Sigo sin poder pasar funciones entre componentes
-    this.updateData = this.updateData.bind(this);
-    //this.pelicula = pelicula;
+    this.pelicula = this.props.pelicula;
   }
+
   removeData(props) {
     this.props.remove(props);
   }
@@ -17,16 +16,24 @@ class MovieCard extends Component{
     this.props.upgrade(props);
   }
 
+  checkMinutes(props) {
+    var minuto = 'minuto';
+    if(this.props.duracion != 1)
+      minuto = 'minutos';
+    return minuto;
+  }
+
   render(){
     return(
       <Card className='float-left movieCard' key={this.props.key}>
         <Card.Body>
-          <Card.Title>Película: {this.props.nombre}</Card.Title>
-          <Card.Text>Categoria: {this.props.categoria}</Card.Text>
-          <Card.Text>Duración: {this.props.duracion}</Card.Text>
-          <Card.Text>Dirección: {this.props.director}</Card.Text>
-          //<Button onClick={() => this.props.remove()}>Borrar</Button>
-          //<Button onClick={() => this.props.upgrade()}>Editar</Button>
+          <Card.Text><b>Película:</b> {this.props.nombre}</Card.Text>
+          <Card.Text><b>Categoria:</b> {this.props.categoria}</Card.Text>
+          <Card.Text><b>Duración:</b> {this.props.duracion} {this.checkMinutes()}</Card.Text>
+          <Card.Text><b>Dirección:</b> {this.props.director}</Card.Text>
+          <Card.Text><b>Protagonistas:</b> {this.props.protagonistas}</Card.Text>
+          <Button style={{marginRight: '10px'}} variant='outline-danger' onClick={() => this.props.remove(this.props.pelicula)}>Borrar</Button>
+          <Button variant='outline-info' onClick={() => this.props.upgrade(this.props.pelicula)}>Editar</Button>
         </Card.Body>
       </Card>
     );

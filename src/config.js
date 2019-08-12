@@ -3,7 +3,7 @@ const config = {
   authDomain: "diagnosticointegrador.firebaseapp.com",
   databaseURL: "https://diagnosticointegrador.firebaseio.com",
   projectId: "diagnosticointegrador",
-  storageBucket: "",
+  storageBucket: "diagnosticointegrador.appspot.com",
   messagingSenderId: "601752277617",
   appId: "1:601752277617:web:03ffe76367b2488f"
 
