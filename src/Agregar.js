@@ -67,6 +67,7 @@ class Agregar extends Component {
                   name="formHorizontalRadios"
                   id="formHorizontalRadios1"
                   ref='categoria'
+                  value='terror'
                 />
                 <Form.Check
                   type="radio"
@@ -74,6 +75,7 @@ class Agregar extends Component {
                   name="formHorizontalRadios"
                   id="formHorizontalRadios2"
                   ref='categoria'
+                  value='terror'
                 />
                 <Form.Check
                   type="radio"
@@ -81,6 +83,7 @@ class Agregar extends Component {
                   name="formHorizontalRadios"
                   id="formHorizontalRadios3"
                   ref='categoria'
+                  value='terror'
                 />
               </Col>
             </Form.Group>

@@ -13,6 +13,7 @@ import Col from 'react-bootstrap/Col'
 import Card from 'react-bootstrap/Card'
 import Form from 'react-bootstrap/Form'
 import FormControl from 'react-bootstrap/FormControl'
+import InputNumber from 'react-input-just-numbers'
 
 class Menu extends React.Component {
   constructor(props) {
@@ -23,8 +24,10 @@ class Menu extends React.Component {
 
     this.state = {
       peliculas: [],
-      filtro: undefined
+      filtro: undefined,
+      value: ''
     };
+    this.onChange = this.onChange.bind(this);
   }
 
   componentDidMount() {
@@ -39,14 +42,13 @@ class Menu extends React.Component {
     let ref = Firebase.database().ref("/");
     ref.on("value", snapshot => {
       const state = snapshot.val();
-      console.log(state);
       this.setState(state);
     });
   };
 
   handleSubmit = event => {
     event.preventDefault();
-    let categoria = this.refs.categoria.value;
+    let categoria = this.state.categoria;
     let nombre = this.refs.nombre.value;
     let duracion = this.refs.duracion.value;
     let director = this.refs.director.value;
@@ -58,11 +60,13 @@ class Menu extends React.Component {
         return data.uid === uid;
       });
       peliculas[countPeliculas].categoria = categoria;
+      console.log(categoria);
       peliculas[countPeliculas].nombre = nombre;
       peliculas[countPeliculas].duracion = duracion;
       peliculas[countPeliculas].director = director;
       peliculas[countPeliculas].protagonistas = protagonistas;
-      Firebase.database().ref("/").update(peliculas);
+      console.log(peliculas);
+      Firebase.database().ref("/peliculas").set(peliculas);
     } else if (categoria && nombre && director && duracion && protagonistas) {
       const uid = new Date().getTime().toString();
       const peliculas = this.state.peliculas;
@@ -84,7 +88,7 @@ class Menu extends React.Component {
     const newState = peliculas.filter(data => {
       return data.uid !== pelicula.uid;
     });
-    this.setState({ peliculas: newState });
+    Firebase.database().ref('/peliculas').set(newState);
   };
 
   updateData = pelicula => {
@@ -114,6 +118,14 @@ class Menu extends React.Component {
     if(arreglo) this.setState({filtro: arreglo}); else this.setState({filtro: []})
   }
 
+
+   onChange(e){
+      const re = /^[0-9\b]+$/;
+      if (e.target.value === '' || re.test(e.target.value)) {
+         this.setState({value: e.target.value})
+      }
+   }
+
   render() {
     let peliculas = [];
     if(this.state.filtro) peliculas = this.state.filtro; else peliculas = this.state.peliculas;
@@ -121,6 +133,7 @@ class Menu extends React.Component {
       <>
       <Navigation filtroNav = {this.filtrar.bind(this)}/>
       <Container>
+        <Row className="justify-content-md-center" style={{paddingTop: '20px'}}><h1>Todas tus peliculas en el mejor lugar</h1></Row>
         <Row className='justify-content-center'>
           <Categories filtrarCategorias = {this.filtrarCategorias.bind(this)} />
         </Row>
@@ -155,7 +168,7 @@ class Menu extends React.Component {
                     Nombre de la pelicula
                   </Form.Label>
                   <Col sm={8}>
-                    <Form.Control type="text" placeholder="Ej. The Revenant" ref='nombre' />
+                    <Form.Control type="text" placeholder="Ej. The Revenant" ref='nombre' maxlength='50' required/>
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} controlId="formHorizontalPassword">
@@ -163,7 +176,7 @@ class Menu extends React.Component {
                     Duración (en minutos)
                   </Form.Label>
                   <Col sm={8}>
-                    <Form.Control type="number" placeholder="Ej. 185" ref='duracion' />
+                    <Form.Control type="text" placeholder="Ej. 185" ref='duracion' value={this.state.value} onChange={this.onChange} maxlength='3' min='0' required/>
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} controlId="formHorizontalEmail">
@@ -171,7 +184,7 @@ class Menu extends React.Component {
                     Dirección
                   </Form.Label>
                   <Col sm={8}>
-                    <Form.Control type="text" placeholder="Ej. Quentin Tarantino" ref='director' />
+                    <Form.Control type="text" placeholder="Ej. Quentin Tarantino" ref='director' maxlength='20' required/>
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} controlId="formHorizontalEmail">
@@ -179,7 +192,7 @@ class Menu extends React.Component {
                     Protagonistas
                   </Form.Label>
                   <Col sm={8}>
-                    <Form.Control type="text" placeholder="Ej. Leonardo DiCaprio" ref='protagonistas' />
+                    <Form.Control type="text" placeholder="Ej. Leonardo DiCaprio" ref='protagonistas' maxlength='30' required/>
                   </Col>
                 </Form.Group>
                 <fieldset>
@@ -188,11 +201,33 @@ class Menu extends React.Component {
                       Categoria
                     </Form.Label>
                     <Col sm={8}>
-                      <Form.Control as="select" ref='categoria'>
-                        <option>Terror</option>
-                        <option>Amor</option>
-                        <option>Acción</option>
-                      </Form.Control>
+                      <Form.Check
+                        type="radio"
+                        label="Terror"
+                        name="formHorizontalRadios"
+                        id="formHorizontalRadios1"
+                        ref='categoria'
+                        value='Terror'
+                        onClick={() => this.setState({categoria: 'Terror'})}
+                      />
+                      <Form.Check
+                        type="radio"
+                        label="Amor"
+                        name="formHorizontalRadios"
+                        id="formHorizontalRadios2"
+                        ref='categoria'
+                        value='Amor'
+                        onClick={() => this.setState({categoria: 'Amor'})}
+                      />
+                      <Form.Check
+                        type="radio"
+                        label="Acción"
+                        name="formHorizontalRadios"
+                        id="formHorizontalRadios3"
+                        ref='categoria'
+                        value='Acción'
+                        onClick={() => this.setState({categoria: 'Acción'})}
+                      />
                     </Col>
                   </Form.Group>
                 </fieldset>
