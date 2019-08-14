@@ -168,7 +168,7 @@ class Menu extends React.Component {
                     Nombre de la pelicula
                   </Form.Label>
                   <Col sm={8}>
-                    <Form.Control type="text" placeholder="Ej. The Revenant" ref='nombre' maxlength='50' required/>
+                    <Form.Control type="text" placeholder="Ej. The Revenant" ref='nombre' maxlength='50' />
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} controlId="formHorizontalPassword">
@@ -176,7 +176,7 @@ class Menu extends React.Component {
                     Duración (en minutos)
                   </Form.Label>
                   <Col sm={8}>
-                    <Form.Control type="text" placeholder="Ej. 185" ref='duracion' value={this.state.value} onChange={this.onChange} maxlength='3' min='0' required/>
+                    <Form.Control type="text" placeholder="Ej. 185" ref='duracion' value={this.state.value} onChange={this.onChange} maxlength='3' min='0' />
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} controlId="formHorizontalEmail">
@@ -184,7 +184,7 @@ class Menu extends React.Component {
                     Dirección
                   </Form.Label>
                   <Col sm={8}>
-                    <Form.Control type="text" placeholder="Ej. Quentin Tarantino" ref='director' maxlength='20' required/>
+                    <Form.Control type="text" placeholder="Ej. Quentin Tarantino" ref='director' maxlength='20' />
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} controlId="formHorizontalEmail">
@@ -192,15 +192,34 @@ class Menu extends React.Component {
                     Protagonistas
                   </Form.Label>
                   <Col sm={8}>
-                    <Form.Control type="text" placeholder="Ej. Leonardo DiCaprio" ref='protagonistas' maxlength='30' required/>
+                    <Form.Control type="text" placeholder="Ej. Leonardo DiCaprio" ref='protagonistas' maxlength='30' />
                   </Col>
                 </Form.Group>
                 <fieldset>
-                  <Form.Group as={Row}>
+                  <Form.Group as={Row} >
                     <Form.Label column sm={4}>
                       Categoria
                     </Form.Label>
-                    <Col sm={8}>
+                      <Form.Check
+                        type="radio"
+                        label="Acción"
+                        name="formHorizontalRadios"
+                        id="formHorizontalRadios3"
+                        ref='categoria'
+                        className = 'space'
+                        value='Acción'
+                        onClick={() => this.setState({categoria: 'Acción'})}
+                      />
+                      <Form.Check
+                        type="radio"
+                        label="Amor"
+                        name="formHorizontalRadios"
+                        id="formHorizontalRadios2"
+                        ref='categoria'
+                        className = 'space'
+                        value='Amor'
+                        onClick={() => this.setState({categoria: 'Amor'})}
+                      />
                       <Form.Check
                         type="radio"
                         label="Terror"
@@ -210,25 +229,6 @@ class Menu extends React.Component {
                         value='Terror'
                         onClick={() => this.setState({categoria: 'Terror'})}
                       />
-                      <Form.Check
-                        type="radio"
-                        label="Amor"
-                        name="formHorizontalRadios"
-                        id="formHorizontalRadios2"
-                        ref='categoria'
-                        value='Amor'
-                        onClick={() => this.setState({categoria: 'Amor'})}
-                      />
-                      <Form.Check
-                        type="radio"
-                        label="Acción"
-                        name="formHorizontalRadios"
-                        id="formHorizontalRadios3"
-                        ref='categoria'
-                        value='Acción'
-                        onClick={() => this.setState({categoria: 'Acción'})}
-                      />
-                    </Col>
                   </Form.Group>
                 </fieldset>
                 <Button type="submit" className="btn btn-primary">
