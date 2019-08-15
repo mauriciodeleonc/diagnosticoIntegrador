@@ -12,10 +12,8 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Card from 'react-bootstrap/Card'
 import Form from 'react-bootstrap/Form'
-import FormControl from 'react-bootstrap/FormControl'
-import InputNumber from 'react-input-just-numbers'
 
-class Menu extends React.Component {
+class Menu extends Component {
   constructor(props) {
     super(props);
     this.removeData = this.removeData.bind(this);
@@ -134,14 +132,14 @@ class Menu extends React.Component {
       <Navigation filtroNav = {this.filtrar.bind(this)}/>
       <Container>
         <Row className="justify-content-md-center" style={{paddingTop: '20px'}}><h1>Todas tus peliculas en el mejor lugar</h1></Row>
-        <Row className='justify-content-center'>
+        <Row className='justify-content-md-center'>
           <Categories filtrarCategorias = {this.filtrarCategorias.bind(this)} />
         </Row>
         <Row>
-          <Col>
             {peliculas.map(pelicula => (
+              <Col sm={1} md={2} lg={4}>
               <MovieCard
-                key = {pelicula.uid}
+                uid = {pelicula.uid}
                 nombre = {pelicula.nombre}
                 categoria = {pelicula.categoria}
                 duracion = {pelicula.duracion}
@@ -151,8 +149,9 @@ class Menu extends React.Component {
                 pelicula = {pelicula}
                 protagonistas = {pelicula.protagonistas}
                 />
+                </Col>
             ))}
-          </Col>
+
         </Row>
         <Row className="justify-content-md-center">
           <Col>
@@ -181,7 +180,7 @@ class Menu extends React.Component {
                 </Form.Group>
                 <Form.Group as={Row} controlId="formHorizontalEmail">
                   <Form.Label column sm={4}>
-                    Dirección
+                    Director(a)
                   </Form.Label>
                   <Col sm={8}>
                     <Form.Control type="text" placeholder="Ej. Quentin Tarantino" ref='director' maxlength='20' />
@@ -200,35 +199,40 @@ class Menu extends React.Component {
                     <Form.Label column sm={4}>
                       Categoria
                     </Form.Label>
-                      <Form.Check
-                        type="radio"
-                        label="Acción"
-                        name="formHorizontalRadios"
-                        id="formHorizontalRadios3"
-                        ref='categoria'
-                        className = 'space'
-                        value='Acción'
-                        onClick={() => this.setState({categoria: 'Acción'})}
-                      />
-                      <Form.Check
-                        type="radio"
-                        label="Amor"
-                        name="formHorizontalRadios"
-                        id="formHorizontalRadios2"
-                        ref='categoria'
-                        className = 'space'
-                        value='Amor'
-                        onClick={() => this.setState({categoria: 'Amor'})}
-                      />
-                      <Form.Check
-                        type="radio"
-                        label="Terror"
-                        name="formHorizontalRadios"
-                        id="formHorizontalRadios1"
-                        ref='categoria'
-                        value='Terror'
-                        onClick={() => this.setState({categoria: 'Terror'})}
-                      />
+                      <Col sm={8}>
+                        <Form.Check
+                          inline
+                          type="radio"
+                          label="Acción"
+                          name="formHorizontalRadios"
+                          id="formHorizontalRadios3"
+                          ref='categoria'
+                          className = 'space'
+                          value='Acción'
+                          onClick={() => this.setState({categoria: 'Acción'})}
+                        />
+                        <Form.Check
+                          inline
+                          type="radio"
+                          label="Amor"
+                          name="formHorizontalRadios"
+                          id="formHorizontalRadios2"
+                          ref='categoria'
+                          className = 'space'
+                          value='Amor'
+                          onClick={() => this.setState({categoria: 'Amor'})}
+                        />
+                        <Form.Check
+                          inline
+                          type="radio"
+                          label="Terror"
+                          name="formHorizontalRadios"
+                          id="formHorizontalRadios1"
+                          ref='categoria'
+                          value='Terror'
+                          onClick={() => this.setState({categoria: 'Terror'})}
+                        />
+                      </Col>
                   </Form.Group>
                 </fieldset>
                 <Button type="submit" className="btn btn-primary">
